@@ -20,12 +20,13 @@ echo "[INFO] Adding user to kvm group..."
 
 sudo usermod -aG kvm $USER
 
-echo "[INFO] Applying group changes..."
-
-# Apply group without logout
-newgrp kvm <<EONG
-echo "[INFO] Inside newgrp session"
-EONG
+echo ""
+echo "⚠️ IMPORTANT: KVM group added."
+echo "If this is your first time, restart WSL after setup:"
+echo "1. Exit terminal"
+echo "2. Run: wsl --shutdown (in Windows PowerShell)"
+echo "3. Reopen WSL"
+echo ""
 
 echo "[INFO] Checking /dev/kvm..."
 
@@ -39,9 +40,10 @@ fi
 echo "[INFO] Checking user groups..."
 groups
 
-echo "[INFO] Testing KVM support..."
+echo "[INFO] Testing KVM support (silent check)..."
 
-if qemu-system-x86_64 -enable-kvm -cpu host -m 512 -nographic -display none -serial none 2>/dev/null; then
+if timeout 2 qemu-system-x86_64 -enable-kvm -cpu host -m 512 \
+    -nographic -display none -serial none 2>/dev/null; then
     echo "[SUCCESS] KVM is working ✅"
 else
     echo "[WARNING] KVM not accessible ⚠️"
