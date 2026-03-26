@@ -37,13 +37,19 @@ if [ -e /dev/kvm ]; then
     if groups | grep -q '\bkvm\b'; then
         echo "[SUCCESS] KVM is available and accessible ✅"
     else
-        echo "[WARNING] KVM device exists but user is not in 'kvm' group ⚠️"
-        echo "Run: sudo usermod -aG kvm \$USER and restart WSL"
+        echo "[INFO] Adding user to 'kvm' group..."
+
+        sudo usermod -aG kvm $USER
+
+        echo "[WARNING] KVM permission updated ⚠️"
+        echo "Please restart WSL to apply changes:"
+        echo "  wsl --shutdown (in Windows PowerShell)"
     fi
 
 else
     echo "[WARNING] /dev/kvm not found ⚠️"
-    echo "KVM not available. QEMU will run in software mode."
+    echo "[INFO] Continuing without KVM..."
+    echo "[INFO] QEMU will run in software mode (slower but works)"
 fi
 
 # -------- PATH FIX --------
