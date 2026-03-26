@@ -41,9 +41,9 @@ if [ -e /dev/kvm ]; then
 
         sudo usermod -aG kvm $USER
 
-        echo "[WARNING] KVM permission updated ⚠️"
+        echo "KVM permission updated! ✅"
         echo "Please restart WSL to apply changes:"
-        echo "  wsl --shutdown (in Windows PowerShell)"
+        echo "wsl --shutdown (in Windows PowerShell)"
     fi
 
 else
