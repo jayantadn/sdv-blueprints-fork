@@ -21,34 +21,32 @@ echo "[INFO] Adding user to kvm group..."
 sudo usermod -aG kvm $USER
 
 echo ""
-echo "⚠️ IMPORTANT: KVM group added."
-echo "If this is your first time, restart WSL after setup:"
+echo "⚠️ IMPORTANT: If this is your first time, restart WSL after setup:"
 echo "1. Exit terminal"
 echo "2. Run: wsl --shutdown (in Windows PowerShell)"
 echo "3. Reopen WSL"
 echo ""
 
-echo "[INFO] Checking /dev/kvm..."
+# -------- KVM CHECK (CLEAN VERSION) --------
+
+echo "[INFO] Checking KVM availability..."
 
 if [ -e /dev/kvm ]; then
-    echo "[SUCCESS] /dev/kvm exists"
-    ls -l /dev/kvm
+    echo "[INFO] /dev/kvm exists"
+
+    if groups | grep -q '\bkvm\b'; then
+        echo "[SUCCESS] KVM is available and accessible ✅"
+    else
+        echo "[WARNING] KVM device exists but user is not in 'kvm' group ⚠️"
+        echo "Run: sudo usermod -aG kvm \$USER and restart WSL"
+    fi
+
 else
-    echo "[WARNING] /dev/kvm not found"
+    echo "[WARNING] /dev/kvm not found ⚠️"
+    echo "KVM not available. QEMU will run in software mode."
 fi
 
-echo "[INFO] Checking user groups..."
-groups
-
-echo "[INFO] Testing KVM support (silent check)..."
-
-if timeout 2 qemu-system-x86_64 -enable-kvm -cpu host -m 512 \
-    -nographic -display none -serial none 2>/dev/null; then
-    echo "[SUCCESS] KVM is working ✅"
-else
-    echo "[WARNING] KVM not accessible ⚠️"
-    echo "QEMU will run in software mode (slower)"
-fi
+# -------- PATH FIX --------
 
 echo "[INFO] Fixing PATH for Python user packages..."
 
@@ -63,4 +61,5 @@ echo ""
 
 echo "Next steps:"
 echo "1. Restart terminal OR run: source ~/.bashrc"
-echo "2. Run: ./launch.sh"
+echo "2. Run: python3 create_image.py to create the base image (only needed once)"
+echo "3. Run: ./launch.sh"
