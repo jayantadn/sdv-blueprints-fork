@@ -67,12 +67,17 @@ Password: ubuntu
 
 ---
 
-## ⚙️ Features
+## ▶️ Launching VM (Every Time)
 
-- Works with and without KVM
-- Automatic CPU fallback (`host` → `qemu64`)
-- Cloud-init based user setup
-- Persistent disk using QCOW2
-- Port forwarding enabled (SSH)
+After setup is completed, you only need to run:
+```
+./launch.sh
+
+```
+Note:
+You do NOT need to run setup.sh again unless:
+    -You want to reset the VM
+    -You changed cloud-init configuration
+    -You deleted generated files
 
 ---
