@@ -1,26 +1,51 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-IMAGE="images/noble-server-cloudimg-amd64.img"
+FINAL_IMAGE="ubuntu-final.qcow2"
+SEED_IMAGE="seed.img"
 
-# Check image
-if [ ! -f "$IMAGE" ]; then
-  echo "[ERROR] Image not found. Run create_image.py first."
-  exit 1
+echo "======================================"
+echo "[INFO] VM LAUNCH SCRIPT"
+echo "======================================"
+
+# -------- CHECK FILES --------
+if [ ! -f "$FINAL_IMAGE" ]; then
+    echo "[ERROR] $FINAL_IMAGE not found"
+    echo "Run: ./setup.sh first"
+    exit 1
 fi
 
-# Create seed image
-./create_seed_img.sh
+if [ ! -f "$SEED_IMAGE" ]; then
+    echo "[ERROR] $SEED_IMAGE not found"
+    echo "Run: ./setup.sh first"
+    exit 1
+fi
 
-echo "[INFO] Launching QEMU..."
+# -------- KVM CHECK --------
+echo "[INFO] Checking KVM..."
+
+if [ -e /dev/kvm ] && groups | grep -q '\bkvm\b'; then
+    echo "[INFO] KVM enabled ✅"
+    KVM_FLAG="-enable-kvm"
+else
+    echo "[WARNING] Running without KVM (slower)"
+    KVM_FLAG=""
+fi
+
+# -------- LAUNCH VM --------
+echo "[INFO] Starting QEMU VM..."
 
 qemu-system-x86_64 \
-  -enable-kvm \
-  -m 2048 \
-  -cpu host \
-  -drive file=$IMAGE,format=qcow2,if=virtio \
-  -cdrom seed.img \
-  -netdev user,id=net0,hostfwd=tcp::2222-:22 \
-  -device virtio-net-pci,netdev=net0 \
-  -nographic
+    $KVM_FLAG \
+    -m 2048 \
+    -smp 2 \
+    -cpu host \
+    -drive file=$FINAL_IMAGE,format=qcow2,if=virtio \
+    -drive file=$SEED_IMAGE,format=raw,if=virtio \
+    -device virtio-net-pci,netdev=net0 \
+    -netdev user,id=net0,hostfwd=tcp::2222-:22 \
+    -bios /usr/share/qemu/OVMF.fd \
+    -nographic
+
+echo "[INFO] VM stopped"
