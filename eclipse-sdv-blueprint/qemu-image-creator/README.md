@@ -15,12 +15,12 @@ It uses:
 ├── setup.sh # One-time setup (downloads image, creates disk, configures cloud-init)
 ├── launch.sh # Launches the VM
 ├── images/ # Stores downloaded Ubuntu cloud image
-├── init/ # Cloud-init configuration files (user-data, meta-data)
-├── ubuntu-final.qcow2 # Generated VM disk (created after setup)
-├── seed.img # Cloud-init seed image (created after setup)
+├── init/ # Cloud-init configuration files 
+├── ubuntu-final.qcow2 # Generated VM disk 
+├── seed.img # Cloud-init seed image
 
-**Note:**  
-The files `images/`, `init/`, `ubuntu-final.qcow2`, and `seed.img` are **generated only after running `setup.sh`**.
+Note:  
+The files `images/`, `init/`, `ubuntu-final.qcow2`, and `seed.img` are generated only after running `setup.sh`.
 ```
 
 ---
@@ -63,16 +63,6 @@ This will:
 ```
 Username: ubuntu
 Password: ubuntu
-```
-
----
-
-## 🌐 SSH Access
-
-You can connect via SSH:
-
-```bash
-ssh ubuntu@localhost -p 2222
 ```
 
 ---
