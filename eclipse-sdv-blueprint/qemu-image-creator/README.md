@@ -76,8 +76,8 @@ After setup is completed, you only need to run:
 ```
 Note:
 You do NOT need to run setup.sh again unless:
-    -You want to reset the VM
-    -You changed cloud-init configuration
-    -You deleted generated files
+- You want to reset the VM
+- You changed cloud-init configuration files
+- You deleted generated files
 
 ---
