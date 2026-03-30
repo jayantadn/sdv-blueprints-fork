@@ -1,0 +1,21 @@
+#cloud-config
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+
+chpasswd:
+  list: |
+    ubuntu:ubuntu
+  expire: false
+
+ssh_pwauth: true
+
+packages:
+  - openssh-server
+
+runcmd:
+  - systemctl enable ssh
+  - systemctl restart ssh

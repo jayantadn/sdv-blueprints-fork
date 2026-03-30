@@ -1,43 +1,33 @@
 #!/bin/bash
- 
+
 set -e
- 
-FINAL_IMAGE="ubuntu-final.qcow2"
-SEED_IMAGE="seed.img"
- 
+
+OUTPUT_DIR="output"
+
+FINAL_IMAGE="$OUTPUT_DIR/ubuntu-final.qcow2"
+SEED_IMAGE="$OUTPUT_DIR/seed.img"
+
 echo "======================================"
 echo "[INFO] VM LAUNCH SCRIPT"
 echo "======================================"
- 
+
 # -------- CHECK FILES --------
-if [ ! -f "$FINAL_IMAGE" ]; then
-    echo "[ERROR] $FINAL_IMAGE not found"
-    echo "Run: ./setup.sh first"
+if [ ! -f "$FINAL_IMAGE" ] || [ ! -f "$SEED_IMAGE" ]; then
+    echo "[ERROR] Required files not found in output/"
+    echo "👉 Run: ./setup.sh first"
     exit 1
 fi
- 
-if [ ! -f "$SEED_IMAGE" ]; then
-    echo "[ERROR] $SEED_IMAGE not found"
-    echo "Run: ./setup.sh first"
-    exit 1
-fi
- 
-# -------- KVM + CPU CHECK --------
-echo "[INFO] Checking KVM..."
- 
+
+# -------- KVM + CPU --------
 if [ -e /dev/kvm ] && groups | grep -q '\bkvm\b'; then
-    echo "[INFO] KVM enabled ✅"
     KVM_FLAG="-enable-kvm"
     CPU_FLAG="-cpu host"
 else
-    echo "[WARNING] Running without KVM (slower)"
     KVM_FLAG=""
     CPU_FLAG="-cpu qemu64"
 fi
- 
-# -------- LAUNCH VM --------
-echo "[INFO] Starting QEMU VM..."
- 
+
+# -------- RUN VM --------
 qemu-system-x86_64 \
     $KVM_FLAG \
     $CPU_FLAG \
@@ -49,5 +39,3 @@ qemu-system-x86_64 \
     -netdev user,id=net0,hostfwd=tcp::2222-:22 \
     -bios /usr/share/qemu/OVMF.fd \
     -nographic
- 
-echo "[INFO] VM stopped"
