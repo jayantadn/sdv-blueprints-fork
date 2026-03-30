@@ -2,7 +2,6 @@
 # Output (Generated Files)
 # ================================
 
-output/
 *.qcow2
 *.img
 *.iso
