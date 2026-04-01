@@ -72,20 +72,19 @@ Once both VM's have finished booting up, you will see a login prompt.
 * **Username:** `ubuntu`
 * **Password:** `ubuntu`
 
-To prove they are connected, go to Computer 1 (`vm1`) and "ping" (send a quick digital hello to) Computer 2 by typing:
+To prove they are connected, go to VM 1 and "ping" VM 2 by typing:
 
 ```bash
 ping 192.168.100.11
 ```
 
 
-To prove they are connected, go to VM 2 (`vm2`) and "ping" Computer 1 by typing:
+To prove they are connected, go to VM 2  and "ping" VM 1 by typing:
 
 ```bash
 ping 192.168.100.10
 ```
-
-If you see lines of data continuously appearing, congratulations! Your two virtual computers are successfully talking to each other. Press `Ctrl + C` to stop the pinging.
+If the packets reached from VM 1 to 2 or vice versa ,the 2 VM 's communicate each other 
 
 ---
 
