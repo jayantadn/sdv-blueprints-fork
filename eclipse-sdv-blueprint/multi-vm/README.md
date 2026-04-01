@@ -45,7 +45,7 @@ Execute the setup script to download the base Ubuntu cloud image, allocate the `
 Run the network script with elevated privileges to instantiate the virtual bridge (`br0`), attach the TAP interfaces, and configure NAT/IP forwarding on the host.
 
 ```bash
-sudo ./network.sh
+./network.sh
 ```
 
 **Step 3: Boot VM 1**
