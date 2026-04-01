@@ -3,7 +3,7 @@
 
 # QEMU Multi-VM Network
 
-This project provides an automated, zero-touch deployment of a multi-node virtual network using QEMU/KVM and cloud-init. It provisions two isolated Ubuntu VMs that communicate over a private Layer 2 bridge while seamlessly maintaining full outbound internet access. It serves as a perfect lightweight, reproducible sandbox for testing distributed systems or Linux networking directly on your local machine.
+This project provides an automated, zero-touch deployment of a multi-node virtual network using QEMU, KVM and cloud-init. It provisions two isolated Ubuntu VMs that communicate over a private Layer 2 bridge while seamlessly maintaining full outbound internet access. It serves as a perfect lightweight, reproducible sandbox for testing distributed systems or Linux networking directly on your local machine.
 
 ***
 ### Project Capabilities
@@ -13,13 +13,12 @@ This project automatically provisions two VMs with the following capabilities:
 
 ---
 
-## Core Components
+##  Core Components
 
-* **`setup.sh`: ** Downloads the base Ubuntu Cloud Image, allocates the `.qcow2` virtual disks, and generates the `cloud-init` seed images.
-* **`network.sh`: ** Configures the virtual network infrastructure by instantiating a Linux bridge, creating TAP interfaces, and applying required `iptables` forwarding rules on the host.
-* **`input/` directory: ** Contains declarative `cloud-init` YAML files (`user-data`, `meta-data`, and network configs) to automatically inject hostnames (`vm1`, `vm2`) and static IP addresses (`192.168.100.10/24`, `192.168.100.11/24`) during the initial boot sequence.
+* **`setup.sh`:** Downloads the base Ubuntu Cloud Image, allocates the `.qcow2` virtual disks, and generates the `cloud-init` seed images.
+* **`network.sh`:** Configures the virtual network infrastructure by instantiating a Linux bridge, creating TAP interfaces, and applying required `iptables` forwarding rules on the host.
+* **`input/` directory:** Contains declarative `cloud-init` YAML files (`user-data`, `meta-data`, and network configs) to automatically inject hostnames (`vm1`, `vm2`) and static IP addresses (`192.168.100.10/24`, `192.168.100.11/24`) during the initial boot sequence.
 * **`vm1_launch.sh` & `vm2_launch.sh`:** The QEMU execution scripts that initialize the KVM guests, define system resources, and bind the virtual NICs to the correct network backends.
----
 
 ## How to Run the Project
 
