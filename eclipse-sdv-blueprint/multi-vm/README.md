@@ -86,7 +86,11 @@ If you see lines of data continuously appearing, congratulations! Your two virtu
 
 WSL's internal Netfilter firewall is actively stopping the communication by dropping all packets trying to cross your virtual bridge. 
 
-Running `sudo iptables -A FORWARD -i br0 -o br0 -j ACCEPT` overrides this restriction, forcing WSL to allow the traffic between the VMs.
+Running overrides this restriction, forcing WSL to allow the traffic between the VMs.
+
+```bash
+sudo iptables -A FORWARD -i br0 -o br0 -j ACCEPT
+```
 
 **How do I turn them off VM's**
 
