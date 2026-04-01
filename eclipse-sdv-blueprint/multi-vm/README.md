@@ -92,7 +92,7 @@ If the packets reached from VM 1 to 2 or vice versa ,the 2 VM 's communicate eac
 
 WSL's internal Netfilter firewall is actively stopping the communication by dropping all packets trying to cross your virtual bridge. 
 
-Running overrides this restriction, forcing WSL to allow the traffic between the VMs.
+Running overrides this restriction, forcing WSL to allow the traffic between the VMs.(need to be done on the WSL terminal not on VMs)
 
 ```bash
 sudo iptables -A FORWARD -i br0 -o br0 -j ACCEPT
