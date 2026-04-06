@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
+
 echo "======================================"
 echo "[INFO] LAUNCHING VM1"
 echo "======================================"
+
 VM_IMG="output/vm1.qcow2"
 SEED_IMG="output/seed1.img"
 
@@ -19,6 +21,9 @@ else
     CPU_FLAG="-cpu qemu64"
 fi
 
+echo "Starting VM1 silently in the background..."
+
+# Launch QEMU completely silently in the background
 qemu-system-x86_64 \
     $KVM_FLAG \
     $CPU_FLAG \
@@ -30,4 +35,5 @@ qemu-system-x86_64 \
     -device virtio-net-pci,netdev=net0,mac=52:54:00:12:34:51 \
     -netdev user,id=net1 \
     -device virtio-net-pci,netdev=net1,mac=52:54:00:12:34:61 \
-    -nographic
+    -display none \
+    -daemonize

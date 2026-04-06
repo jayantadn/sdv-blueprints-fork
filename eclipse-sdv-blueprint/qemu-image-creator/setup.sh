@@ -75,4 +75,43 @@ cloud-localds --network-config "$INPUT_DIR/network-vm2.yaml" "$SEED2" "$INPUT_DI
 echo "======================================"
 echo "[SUCCESS] SETUP COMPLETED"
 echo "======================================"
-echo "Next: run ./network.sh"
+
+
+#!/bin/bash
+set -e
+echo "[INFO] Creating Bridge and TAP interfaces..."
+
+# 1. Create and enable the bridge
+sudo ip link add br0 type bridge 2>/dev/null || true
+sudo ip link set br0 up
+
+# 2. Assign IP to bridge (AFTER creation)
+sudo ip addr add 192.168.100.1/24 dev br0 2>/dev/null || true
+
+# 3. Create TAP1 and attach to bridge
+sudo ip tuntap add dev tap1 mode tap user $USER 2>/dev/null || true
+sudo ip link set tap1 master br0
+sudo ip link set tap1 up
+
+# 4. Create TAP2 and attach to bridge
+sudo ip tuntap add dev tap2 mode tap user $USER 2>/dev/null || true
+sudo ip link set tap2 master br0
+sudo ip link set tap2 up
+
+# 5. Enable forwarding (IMPORTANT)
+sudo sysctl -w net.ipv4.ip_forward=1
+
+# 6. Allow traffic (IMPORTANT)
+sudo iptables -A INPUT -i br0 -j ACCEPT 2>/dev/null || true
+sudo iptables -A FORWARD -i br0 -j ACCEPT 2>/dev/null || true
+sudo iptables -A FORWARD -o br0 -j ACCEPT 2>/dev/null || true
+
+echo "[SUCCESS] Bridge and TAP interfaces ready"
+
+echo "======================================"
+echo "[SUCCESS] Network setup completed"
+echo "======================================"
+
+echo ""
+# Hand off control to the VM1 launch script (This will trigger your background QEMU and polling spinner!)
+./vm1_launch.sh
