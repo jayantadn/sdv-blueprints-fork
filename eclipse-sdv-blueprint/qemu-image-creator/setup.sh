@@ -115,3 +115,28 @@ echo "======================================"
 echo ""
 # Hand off control to the VM1 launch script (This will trigger your background QEMU and polling spinner!)
 ./vm1_launch.sh
+
+# ==========================================
+# Automated Polling: Wait for Docker Container
+# ==========================================
+echo ""
+echo "[INFO] Waiting for SDV Runtime to download and launch..."
+echo "       (This usually takes 2-3 minutes. Please wait...)"
+
+# Silently knock on port 55555 every 5 seconds until it answers
+while ! bash -c "echo > /dev/tcp/192.168.100.10/55555" 2>/dev/null; do
+    echo -ne "."
+    sleep 5
+done
+
+echo -e "\n"
+echo "========================================================"
+echo " [SUCCESS] VM1 setup completed and runtime created! "
+echo "========================================================"
+echo ""
+echo " For launching VM2, open a NEW terminal and run:"
+echo "   ./vm2_launch.sh"
+echo ""
+echo " To log into VM1, use:"
+echo " ssh ubuntu@192.168.100.10"
+echo ""
